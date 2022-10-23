@@ -1,24 +1,6 @@
 version: '3.1'
 
 services:
-  proxy:
-    image: traefik:latest
-    restart: always
-    command:
-      - "--api.insecure=false"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      # Endpoints setup
-      - "--entrypoints.postgres.address=:5432" # PostgreSQL endpoint
-      - "--entrypoints.adminer.address=:8080" # PostgreSQL endpoint
-    ports:
-      - "443:443"
-      - "8080:8080" # Adminer dashboard
-      - "5432:5432" # PostgreSQL port
-    volumes:
-      - "./letsencrypt:/letsencrypt"
-      - /var/run/docker.sock:/var/run/docker.sock
-
   postgres:
     image: postgres
     restart: always
@@ -28,21 +10,11 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - ./appdata/postgres:/var/lib/postgresql/data
-    labels:
-      - "traefik.enable=true"
-      # routers
-      - "traefik.tcp.routers.postgres.entryPoints=postgres"
-      - "traefik.tcp.routers.postgres.service=postgres"
-      # services (needed for TCP)
-      - "traefik.tcp.services.postgres.loadbalancer.server.port=5432"
+    ports:
+      - "5432:5432"
 
   adminer:
     image: adminer
     restart: always
-    labels:
-      - "traefik.enable=true"
-      # routers
-      - "traefik.http.routers.adminer.entryPoints=adminer"
-      - "traefik.http.routers.adminer.service=adminer"
-      # services (needed for TCP)
-      - "traefik.http.services.adminer.loadbalancer.server.port=8080"
+    ports:
+      - "8080:8080"
