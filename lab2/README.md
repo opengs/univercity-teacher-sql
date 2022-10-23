@@ -22,3 +22,6 @@
    3. delete user
    4. create user
 5. [Optional] Set up Swagger UI for the project
+
+Possible end result:
+![endResult](end.png)
