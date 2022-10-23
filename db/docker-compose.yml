@@ -31,7 +31,6 @@ services:
     labels:
       - "traefik.enable=true"
       # routers
-      - "traefik.tcp.routers.postgres.rule=HostSNI(`*`)"
       - "traefik.tcp.routers.postgres.entryPoints=postgres"
       - "traefik.tcp.routers.postgres.service=postgres"
       # services (needed for TCP)
@@ -43,7 +42,6 @@ services:
     labels:
       - "traefik.enable=true"
       # routers
-      - "traefik.http.routers.adminer.rule=Host(`*`)"
       - "traefik.http.routers.adminer.entryPoints=adminer"
       - "traefik.http.routers.adminer.service=adminer"
       # services (needed for TCP)
